@@ -22,9 +22,9 @@ const SidebarElement: React.FC<SidebarElementProps> = ({ title, hoverText, url, 
     };
 
     return (
-        <li key={Math.random()}>
+        <li key={'list_' + title}>
         { !subElements && (<a
-             key={Math.random()}
+             key={'a_' + title}
             href={url}
             className={`flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 ${imagePath == undefined ?? 'pl-[50px]'}`}
             title={hoverText}>
@@ -46,7 +46,7 @@ const SidebarElement: React.FC<SidebarElementProps> = ({ title, hoverText, url, 
 
         { subElements && (
                             <button
-                            key={Math.random()}
+                            key={'button_' + title}
                             type="button"
                             className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                             onClick={toggleDropdown}

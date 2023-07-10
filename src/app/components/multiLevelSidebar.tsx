@@ -18,7 +18,7 @@ const MultiLevelSidebar: React.FC<MultiLevelSidebarProps> = ({showSidebar}) => {
         aria-label="Sidebar"
       >
         <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800 pt-10">
-          <ul key={Math.random()} className="space-y-2 font-medium">
+          <ul key={'sidebarList'} className="space-y-2 font-medium">
             
                 <SidebarElement key='media' title='Medien' hoverText='Alle Medien' url='#' imagePath='./vercel.svg'subElements={
                     [
@@ -28,30 +28,6 @@ const MultiLevelSidebar: React.FC<MultiLevelSidebarProps> = ({showSidebar}) => {
                     ]
                 } />
                 <SidebarElement key='sync' title='Sync Status' hoverText='Der aktuelle Status der Syncronisation des Fortschritts der Medien' url='#' imagePath='./vercel.svg'/>
-                <SidebarElement  key={Math.random()}title='Home3' hoverText='Home' url='#' imagePath='./vercel.svg'/>
-                <SidebarElement key={Math.random()} title='Home 4' hoverText='Home' url='#' imagePath='./vercel.svg'/>
-                <SidebarElement key={Math.random()} title='Home 5' hoverText='Home' url='#' imagePath='./vercel.svg'/>
-                <SidebarElement key={Math.random()} title='Home 6' hoverText='Home' url='#' imagePath='./vercel.svg'/>
-                <SidebarElement key={Math.random()} title='Home 7' hoverText='Home' url='#' imagePath='./vercel.svg'/>
-                <SidebarElement key={Math.random()} title='Home 8' hoverText='Home' url='#' imagePath='./vercel.svg'/>
-                <SidebarElement key={Math.random()} title='Home 9' hoverText='Home' url='#' imagePath='./vercel.svg' subElements={
-                    [
-                        <SidebarElement key={Math.random()} title='Home 10' hoverText='Home' url='#'/>,
-                        <SidebarElement key={Math.random()} title='Home 11' hoverText='Home' url='#'/>
-                    ]
-                }
-                />
-                <SidebarElement key={Math.random()} title='Home 12' hoverText='Home' url='#' imagePath='./vercel.svg' subElements={
-                    [
-
-                        <SidebarElement key={Math.random()} title='Home 14' hoverText='Home' url='#'/>,
-                        <SidebarElement key={Math.random()} title='Home 14' hoverText='Home' url='#'/>,
-                        <SidebarElement key={Math.random()} title='Home 15' hoverText='Home' url='#'/>,
-                        <SidebarElement key={Math.random()} title='Home 16' hoverText='Home' url='#'/>,
-                        <SidebarElement key={Math.random()} title='Home 17' hoverText='Home' url='#'/>,
-                    ]
-                }
-                />
             
           </ul>
         </div>

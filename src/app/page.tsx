@@ -23,10 +23,10 @@ export default function Home() {
 
   return (
     <Frame 
-    key={Math.random()}
+    key={'mainFrame'}
       children={[
         <NavBar key="navBar" handleToggleSidebar={handleToggleSidebar} handleUploadPopup={handleToggleUpload} />,
-        <Upload key="upload" showUpload={isUploadOpen} setShowUpload={handleToggleUpload} />,
+        <Upload key="upload" showUpload={isUploadOpen} />,
         <MultiLevelSidebar key="levelsidebar" showSidebar={isOpen} />
         
       ]}

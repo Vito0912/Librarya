@@ -2,7 +2,7 @@
 import React from "react";
 
 interface NavBarProps {
-    handleToggleSidebar: () => void;
+    handleToggleSidebar: (event: React.MouseEvent<HTMLButtonElement>) => void;
     handleUploadPopup: () => void;
 }
 
