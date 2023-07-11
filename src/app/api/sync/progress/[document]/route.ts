@@ -24,13 +24,13 @@ export async function GET(request: Request,
         const documentName = params.document;
 
         if(!documentName) {
-            return new Response("Document not found", { status: 404 })
+            return NextResponse.json({ message: 'Document not found', success: false }, { status: 404 })
         }
 
         const fetchJson = await db('position').where({'media_md5': documentName, 'user_id': dbUser.userModel.id }).first();
 
         if(fetchJson === undefined) {
-            return new Response("Document not found", { status: 404 })
+            return NextResponse.json({ message: 'Document not found', success: false }, { status: 404 })
         }
 
         const { progress, percentage, device, device_id, time } = fetchJson;

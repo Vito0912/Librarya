@@ -8,15 +8,17 @@ export default async function createDB(db: any) {
             table.string('title')
             table.string('sort')
             table.string('path')
-            table.string('type')
             table.timestamp('created');
             table.timestamp('edited');
             table.timestamp('published');
             table.integer('author');
             table.string('isbn')
             table.string('uuid')
+            table.string('md5_binary_checksum')
+            table.string('md5_filename_checksum')
             table.string('author_sort')
             table.integer('series_index')
+            table.integer('media_type')
             table.boolean('has_cover')
         });
     }
@@ -45,7 +47,7 @@ export default async function createDB(db: any) {
     // Add test book entry
     if(await db.from('media').where({title: 'Test Book'}).first() === undefined) {
         await db('author').insert({name: 'Test Author', sort: 'Test Author'});
-        await db('media').insert({title: 'Test Book', sort: 'Test Book', path: 'test_book.epub', created: '2021-10-10 10:10:10', edited: '2021-10-10 10:10:10', published: '2021-10-10 10:10:10', author: 1, isbn: '1234567890', uuid: '1234567890', author_sort: 'Test Book', series_index: 1, has_cover: true});    
+        await db('media').insert({md5_filename_checksum: '', md5_binary_checksum: '', title: 'Test Book', sort: 'Test Book', path: 'test_book.epub', created: '2021-10-10 10:10:10', edited: '2021-10-10 10:10:10', published: '2021-10-10 10:10:10', author: 1, isbn: '1234567890', uuid: '1234567890', author_sort: 'Test Book', series_index: 1, has_cover: true});    
     } ;
 
     // Add test user
@@ -61,14 +63,13 @@ export default async function createDB(db: any) {
 
     } ;
 
-    if (!(await db.schema.hasTable('data'))) {
-        await db.schema.createTable('data', (table: any) => {
+    if (!(await db.schema.hasTable('media_info'))) {
+        await db.schema.createTable('media_info', (table: any) => {
             table.increments('id')
-            table.integer('media')
-            table.string('format')
+            table.integer('media_id')
+            table.string('format') // File extension
             table.integer('size')
             table.integer('size_compressed')
-            table.string('name')
         });
     }
 
