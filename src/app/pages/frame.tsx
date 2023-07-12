@@ -3,6 +3,7 @@ import React, {useState, useEffect} from "react";
 import SortButton from "../components/sortButton";
 import Book from "../components/book";
 import axios from "axios";
+import { Conversion } from  "../../function/utils/helpers/conversion";
 
 type FrameProps = {
     children: React.ReactElement[]
@@ -86,7 +87,7 @@ const Frame = ({children}: FrameProps) => {
                                 <span>Tags: {bookStats != null ? (bookStats.tagCount ?? 0) : 0}</span>
                                 </div>
                                 <div>
-                                <span>Size: {bookStats != null ? (bookStats.size ?? 0): 0}</span>
+                                <span>Size: {bookStats != null ? (Conversion.formatSize(bookStats.size ?? 0)): 0}</span>
                                 </div>
                             </div>
                     </div>

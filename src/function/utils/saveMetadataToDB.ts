@@ -54,7 +54,7 @@ class SaveMetadataToDB {
                 title: (this.metadata.metadataInfo!.title) ?? 'Unkown', 
                 sort: this.metadata.metadataInfo!.sort ?? '', 
                 path: (this.metadata.metadataInfo!.path ?? this.path) ?? '', 
-                type: this.metadata.metadataInfo!.type ?? '', 
+                media_type: 0, //TODO: Add media type conversion 
                 created: this.metadata.metadataInfo!.creationDate, 
                 edited: this.metadata.metadataInfo!.modificationDate, 
                 published: this.metadata.metadataInfo!.published ?? '',
@@ -72,7 +72,7 @@ class SaveMetadataToDB {
                 media_id: media[0].id,
                 format: fileExtension,
                 size: fileSizes.fileSize,
-                compressed_size: fileSizes.compressedSize,
+                size_compressed: fileSizes.compressedSize,
             });
         }
             

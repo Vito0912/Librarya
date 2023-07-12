@@ -19,7 +19,7 @@ async function getBookStats() {
   // Count the number of tags in database
   const tagCount = await db('tags').count('id as count').first();
   // Add the number of size of all books in database
-  const size = await db('data').sum('size as size').first();
+  const size = await db('media_info').sum('size as size').first();
 
   // return all the stats
   return {
