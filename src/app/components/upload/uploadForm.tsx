@@ -1,6 +1,7 @@
 import { useState, ChangeEvent, DragEvent } from 'react';
 import { Conversion } from '@/function/utils/helpers/conversion';
 import handleUpload from '@/function/handleUpload';
+import ProgressBar from './progressBar';
 
 interface FileObject {
   [key: string]: File;
@@ -17,6 +18,8 @@ const UploadForm: React.FC<UploadFormProps> = ({ toggle }) => {
     status: false,
     message: '',
   });
+  const [progress, setProgress] = useState(0);
+
   const allowedFiles = ['.pdf'];
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -46,7 +49,7 @@ const UploadForm: React.FC<UploadFormProps> = ({ toggle }) => {
   const submitFiles = async (): Promise<void> => {
     setError({ status: false, message: '' });
     const filesArray = Object.values(files) as File[];
-    const content = await handleUpload(filesArray);
+    const content = await handleUpload(filesArray, setProgress);
     if (content.error) {
       setError({ status: true, message: content.error });
     } else {
@@ -168,6 +171,7 @@ const UploadForm: React.FC<UploadFormProps> = ({ toggle }) => {
                   Upload now
                 </button>
               </footer>
+              <ProgressBar key={'progress'} progress={progress}></ProgressBar>
             </section>
           </article>
         </div>

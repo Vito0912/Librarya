@@ -1,7 +1,15 @@
 import { ResponseData } from "@/database/models/responseData";
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 
-export default async function uploadMedia(files: File[]): Promise<ResponseData> {
+export default async function uploadMedia(files: File[], setProgress: any): Promise<ResponseData> {
+  const options: AxiosRequestConfig = {
+    headers: { "Content-Type": "multipart/form-data" },
+    onUploadProgress: (progressEvent: any) => {
+      const percentage = (progressEvent.loaded * 100) / progressEvent.total;
+      setProgress(+percentage.toFixed(2));
+    },
+  };
+  
   try {
 
     const validFiles: File[] = [];
@@ -20,13 +28,7 @@ export default async function uploadMedia(files: File[]): Promise<ResponseData> 
 
     validFiles.forEach((file) => formData.append("file", file));
 
-    console.log("Uploaded files:", validFiles.length);
-
-    const response = await axios.post("/api/media", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    const response = await axios.post("/api/media", formData, options);
 
     return { data: response.data, statusCode: 200 };
   } catch (error: any) {

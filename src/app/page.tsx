@@ -2,7 +2,7 @@
 
 import MultiLevelSidebar from './components/multiLevelSidebar'
 import NavBar from './components/navBar'
-import UploadForm from './components/uploadForm';
+import UploadForm from './components/upload/uploadForm';
 import Frame from './pages/frame'
 import { useState } from 'react';
 
@@ -19,7 +19,6 @@ export default function Home() {
 
   const handleToggleUpload = () => {
     setIsUploadOpen(!isUploadOpen); // Toggles the value of isOpen when called
-    console.log(isUploadOpen);
   };
 
   return (
