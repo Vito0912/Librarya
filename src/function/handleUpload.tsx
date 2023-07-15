@@ -1,6 +1,7 @@
+import { ResponseData } from "@/database/models/responseData";
 import axios from "axios";
 
-export default async function uploadMedia(files: FileList) {
+export default async function uploadMedia(files: File[]): Promise<ResponseData> {
   try {
 
     const validFiles: File[] = [];
@@ -11,8 +12,7 @@ export default async function uploadMedia(files: FileList) {
     }
 
     if (!validFiles.length) {
-      alert("No valid files were chosen");
-      return;
+      return { error: "No valid files were chosen", statusCode: 400 };
     }
 
 
@@ -20,18 +20,19 @@ export default async function uploadMedia(files: FileList) {
 
     validFiles.forEach((file) => formData.append("file", file));
 
+    console.log("Uploaded files:", validFiles.length);
 
-    console.log(formData);
     const response = await axios.post("/api/media", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     });
+
+    return { data: response.data, statusCode: 200 };
   } catch (error: any) {
-    console.log(error);
-    if (error.config && error.config.headers) {
-      console.log(error.config.headers);
+    if(error.response) {
+      return error.response.data;
     }
-    
   }
+  return { error: "An unknown error occurred", statusCode: 500 };
 }

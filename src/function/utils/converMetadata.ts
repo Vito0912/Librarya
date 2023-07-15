@@ -3,8 +3,12 @@ import EPubMetadata from "../../function/metadata/epub";
 import Metadata from "../metadata/metadata";
 import convertToEnglish from "./helpers/convertToEnglish";
 import SaveMetadataToDB from "./saveMetadataToDB";
+import { ResponseData } from "@/database/models/responseData";
+import fs from 'fs';
+import { writeFile } from "fs/promises";
+import path from "path";
 
-export default async function converMetadata(file: ArrayBuffer, fileName: string, fileExtensionDot: string) {
+export default async function converMetadata(file: ArrayBuffer, fileName: string, fileExtensionDot: string): Promise<ResponseData> {
 
     const fileNameWithoutExtension = fileName.slice(0, fileName.length - fileExtensionDot.length);
     const fileExtension = fileExtensionDot.slice(1);
@@ -22,10 +26,10 @@ export default async function converMetadata(file: ArrayBuffer, fileName: string
             metadata = new EPubMetadata();
     
         default:
-            break;
+            return { statusCode: 415, error: "File extension not supported" };
     }
 
-    if(metadata === undefined || metadata.metadataInfo === undefined) throw new Error("Metadata is undefined");
+    if(metadata === undefined || metadata.metadataInfo === undefined) throw { statusCode: 500, error: "Error fetching metadata from file. Is it suported?"}
 
     const a = metadata.metadataInfo.author;
 
@@ -40,11 +44,20 @@ export default async function converMetadata(file: ArrayBuffer, fileName: string
 
     const filePath = './uploads/' + author_path + '/' + convertToEnglish(fileName);
 
+
+    const folderPath = path.dirname(filePath);
+    if (!fs.existsSync(folderPath)) {
+      await fs.promises.mkdir(folderPath, { recursive: true });
+    }
+
+    await writeFile(filePath, Buffer.from(file));
+
+
     const saveMetadata = new SaveMetadataToDB(metadata, filePath, file);
 
     const check = await saveMetadata.saveMetadataToDB();
 
     if(check === false) throw new Error("Error saving metadata to DB");
 
-    return filePath;
+    return { statusCode: 200, data: filePath };
 }
