@@ -4,18 +4,20 @@ interface BookProps {
     id: number;
     title: string;
     authors: number[];
+    path?: string;
 }
 
-const Book: React.FC<BookProps> = ({id, title, authors}) => {
+const Book: React.FC<BookProps> = ({id, title, authors, path}) => {
 
     let image_path = `/book-covers/${id}.jpg`;
 
+    // TODO:
     // check if image exists
     // if not, use default image
 
 
     return (
-        <div className="border-2 border-dashed border-gray-300 rounded-lg dark:border-gray-600 col-sm-3 col-lg-2 col-xs-6 max-w-[200px]">
+        <div className="rounded-lg col-sm-3 col-lg-2 col-xs-6 max-w-[200px]">
             <div id={"image-" + id}>
                 <span>
                     <Image
@@ -27,7 +29,7 @@ const Book: React.FC<BookProps> = ({id, title, authors}) => {
                 </span>
             </div>
             <div id='book-info'>
-                <div>{title}</div>
+                <div>{(path != undefined && path != "") ? <a href={path}>{title}</a> : title}</div>
                 <div>{authors.toString()}</div>
             </div>
         </div>

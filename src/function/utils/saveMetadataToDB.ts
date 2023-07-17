@@ -48,12 +48,14 @@ class SaveMetadataToDB {
             const md5Binary = this.generateMD5HashBinary();
             const md5Filename = this.genereateMD5HashFilename()
             const fileSizes = await FileHelper.getSize(this.path);
+            let mediaPath = (this.metadata.metadataInfo!.path ?? this.path) ?? ''
+            mediaPath = mediaPath.replace(/^uploads\//, '');
 
             // Media already exists
             const media = await db('media').insert({
                 title: (this.metadata.metadataInfo!.title) ?? 'Unkown', 
                 sort: this.metadata.metadataInfo!.sort ?? '', 
-                path: (this.metadata.metadataInfo!.path ?? this.path) ?? '', 
+                path: mediaPath, 
                 media_type: 0, //TODO: Add media type conversion 
                 created: this.metadata.metadataInfo!.creationDate, 
                 edited: this.metadata.metadataInfo!.modificationDate, 
