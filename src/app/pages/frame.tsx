@@ -98,7 +98,7 @@ const Frame = ({children}: FrameProps) => {
             
                     
                 {(bookInformations != undefined && bookInformations != null) ? bookInformations.map((bookInfo, index) => (
-                    <Book key={bookInfo.id} id={index} title={bookInfo.title} authors={bookInfo.author_sort} path={bookInfo.path} />
+                    <Book key={bookInfo.id} id={bookInfo.id} title={bookInfo.title} authors={bookInfo.author_sort} />
                 )) : null}
 
             </div>
