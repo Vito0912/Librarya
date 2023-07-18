@@ -23,6 +23,10 @@ let nextConfig = {
           source: '/healthcheck',
           destination: '/api/sync/',
         },
+        {
+          source: '/content/:path*',
+          destination: '/api/content/:path*',
+        },
       ]
     },
   }

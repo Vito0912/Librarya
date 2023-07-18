@@ -4,10 +4,9 @@ interface BookProps {
     id: number;
     title: string;
     authors: number[];
-    path?: string;
 }
 
-const Book: React.FC<BookProps> = ({id, title, authors, path}) => {
+const Book: React.FC<BookProps> = ({id, title, authors}) => {
 
     let image_path = `/book-covers/${id}.jpg`;
 
@@ -29,7 +28,7 @@ const Book: React.FC<BookProps> = ({id, title, authors, path}) => {
                 </span>
             </div>
             <div id='book-info'>
-                <div>{(path != undefined && path != "") ? <a href={path}>{title}</a> : title}</div>
+                <div>{<a href={'./content/media/' + id}>{title}</a>}</div>
                 <div>{authors.toString()}</div>
             </div>
         </div>

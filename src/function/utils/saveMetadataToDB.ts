@@ -10,12 +10,10 @@ class SaveMetadataToDB {
 
     private metadata: Metadata;
     private path: string;
-    private file: ArrayBuffer;
 
-    constructor( metadata: Metadata, path: string, file: ArrayBuffer ) {
+    constructor( metadata: Metadata, path: string) {
         this.metadata = metadata;
         this.path = path;
-        this.file = file;
     }
 
     public async saveMetadataToDB(): Promise<boolean> {
@@ -49,7 +47,7 @@ class SaveMetadataToDB {
             const md5Filename = this.genereateMD5HashFilename()
             const fileSizes = await FileHelper.getSize(this.path);
             let mediaPath = (this.metadata.metadataInfo!.path ?? this.path) ?? ''
-            mediaPath = mediaPath.replace(/^uploads\//, '');
+            mediaPath = mediaPath.replace("./uploads/", "");
 
             // Media already exists
             const media = await db('media').insert({
@@ -78,10 +76,6 @@ class SaveMetadataToDB {
             });
         }
             
-
-
-
-        //
     }
 
     private generateMD5HashBinary(): string {

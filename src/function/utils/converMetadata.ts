@@ -53,7 +53,7 @@ export default async function converMetadata(file: ArrayBuffer, fileName: string
     await writeFile(filePath, Buffer.from(file));
 
 
-    const saveMetadata = new SaveMetadataToDB(metadata, filePath, file);
+    const saveMetadata = new SaveMetadataToDB(metadata, filePath);
 
     const check = await saveMetadata.saveMetadataToDB();
 
