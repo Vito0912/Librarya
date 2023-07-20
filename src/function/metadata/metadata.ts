@@ -1,8 +1,9 @@
 class Metadata {
 
     public metadataInfo: {
+        id: number | undefined;
         title: string;
-        author: string;
+        author: number | undefined;
         subject: any;
         keywords: any;
         creationDate: any;

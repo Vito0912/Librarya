@@ -12,7 +12,7 @@ export default async function createDB(db: any) {
             table.timestamp('edited');
             table.timestamp('published');
             table.integer('author');
-            table.string('isbn')
+            table.string('isbn') // TODO: cahnge to identifier-id
             table.string('uuid')
             table.string('md5_binary_checksum')
             table.string('md5_filename_checksum')

@@ -7,7 +7,7 @@ export async function GET(request: Request,
 
         const id = params.id;
 
-
+        // TODO: add screen when not using "Accept: application/json"
         if(!id) {
             return NextResponse.json({ message: 'No id provided', success: false }, { status: 400 })
         }
