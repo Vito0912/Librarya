@@ -1,3 +1,5 @@
+import { RoleModel } from "./roleModel";
+
 interface UserModel {
     id: number;
     username: string;
@@ -6,7 +8,7 @@ interface UserModel {
     mail: string;
     password: string;
     password_sync: string;
-    role: number;
+    role: RoleModel;
   }
 
 export default UserModel;
