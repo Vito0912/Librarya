@@ -1,5 +1,5 @@
 export interface IdentifierModel {
-    id: number;
+    id?: number;
     name: string;
     value: string | number;
 }

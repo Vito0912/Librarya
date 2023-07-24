@@ -1,5 +1,5 @@
 export interface AuthorModel {
-    id: number;
+    id?: number;
     name: string;
     sort?: string;
 }

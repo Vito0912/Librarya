@@ -5,23 +5,25 @@ import { SeriesModel } from "./seriesModel";
 import { TagModel } from "./tagModel";
 import { RatingModel } from "./ratingModel";
 import { LanguageModel } from "./languageModel";
+import { PermissionModel } from "./permissionModel";
 
 export interface MediaModel {
-    id: number;
+    id?: number;
     title: string;
     uuid: string;
     md5_filname: string;
+    users: PermissionModel[];
 
     md5_binary?: string;
 
     path?: string;
-    author?: AuthorModel;
-    identifier?: IdentifierModel[];
+    authors?: AuthorModel[];
+    identifiers?: IdentifierModel[];
     series?: SeriesModel[];
     mediaType?: MediaType;
     tags?: TagModel[];
-    rating?: RatingModel;
-    language?: LanguageModel;
+    ratings?: RatingModel[];
+    languages?: LanguageModel[];
 
     creationDate?: number;
     modificationDate?: number;

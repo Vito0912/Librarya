@@ -1,6 +1,5 @@
 export interface SeriesModel {
-    id: number;
+    id?: number;
     name: string;
     currentIndex?: number;
-    maxIndex?: number;
 }
