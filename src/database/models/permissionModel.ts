@@ -2,6 +2,6 @@ import UserModel from "./userModel";
 
 export interface PermissionModel {
     id?: number;
-    user: UserModel;
+    user: UserModel | number; 
     permission: number;
 }

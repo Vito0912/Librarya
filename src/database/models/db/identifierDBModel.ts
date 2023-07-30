@@ -2,7 +2,7 @@ import { Knex } from "knex";
 import { ResponseData } from "../responseData";
 
 export interface IdentifierDBModel {
-    id: number;
+    id?: number;
     name: string;
     value: string | number;
 }

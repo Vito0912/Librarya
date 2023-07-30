@@ -6,6 +6,7 @@ import { TagModel } from "./tagModel";
 import { RatingModel } from "./ratingModel";
 import { LanguageModel } from "./languageModel";
 import { PermissionModel } from "./permissionModel";
+import { StatsModel } from "./statsModel";
 
 export interface MediaModel {
     id?: number;
@@ -13,6 +14,7 @@ export interface MediaModel {
     uuid: string;
     md5_filname: string;
     users: PermissionModel[];
+    stats: StatsModel;
 
     md5_binary?: string;
 

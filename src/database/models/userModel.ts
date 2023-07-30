@@ -1,5 +1,5 @@
 interface UserModel {
-    id: number;
+    id?: number;
     username: string;
     firstname: string;
     lastname: string;

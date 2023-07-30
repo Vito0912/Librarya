@@ -127,6 +127,8 @@ export async function getPermissionById(db: Knex<any, unknown[]>, permission_id:
 
     const user = await getUserById(db, permission.user);
 
+    if(user.statusCode !== 200) return user;
+
     const permissionModel: PermissionModel = {
         id: permission.id,
         permission: permission.permission,

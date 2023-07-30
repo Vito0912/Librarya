@@ -1,56 +1,56 @@
-import knex from 'knex';
+import knex, { Knex } from 'knex';
 import path from "path";
 import createDB from './createDB';
 import fs from 'fs';
 import { createMediaDB, insertMediaDB, insertMediaToDB } from './models/db/mediaDBModel';
 import { createAuthorDBs, getAuthorsByMediaId } from './models/db/authorDBModel';
+import { createUserDB } from './models/db/userDBModel';
+import { createIdentifierDBs } from './models/db/identifierDBModel';
+import { createLanguageDBs } from './models/db/languageDBModel';
+import { createPermissionDBs } from './models/db/permissionDBModel';
+import { createRatingDBs } from './models/db/ratingDBModel';
+import { createSeriesDBs } from './models/db/seriesDBModel';
+import { createTagDBs } from './models/db/tagDBModel';
+import { createStatsDBs } from './models/db/statsDBModel';
 
 const dbPath = path.resolve('./src/database/data.sql');
 const dirPath = path.dirname(dbPath);
 
-if (!fs.existsSync(dirPath)) {
+let db: Knex;
+
+if (!fs.existsSync(dbPath)) {
   fs.mkdirSync(dirPath, { recursive: true });
-}
 
-const db = knex({
-    client: 'better-sqlite3',
-    connection: {
-        filename: path.resolve('./src/database/data.sql'),
-    },
-    useNullAsDefault: true,
-});
 
-createMediaDB(db).then(() => {
-    console.log('Database created 1');
-    createAuthorDBs(db).then(() => {
-
-        insertMediaToDB(db, {
-            title: 'Test',
-            uuid: 'test',
-            md5_filname: 'test',
-            sort: 'test',
-            md5_binary: 'test',
-            path: 'test',
-            creationDate: 0,
-            modificationDate: 0,
-            publishedDate: 0,
-            hasCover: false,
-            authors: [
-                {
-                    name: 'Michael Jackson',
-                    sort: 'Jackson, Michael'
-                }
-            ],
-        }).then((val) => {
-            getAuthorsByMediaId(db, val.data).then((val1) => {
-                console.log(val1)
-            });
-            console.log(val)
-        
-        });
-
+    db = knex({
+        client: 'better-sqlite3',
+        connection: {
+            filename: path.resolve('./src/database/data.sql'),
+        },
+        useNullAsDefault: true,
     });
-});
+
+    createMediaDB(db).then(async () => {
+        await createAuthorDBs(db);
+        await createUserDB(db);
+        await createIdentifierDBs(db);
+        await createLanguageDBs(db);
+        await createPermissionDBs(db);
+        await createRatingDBs(db);
+        await createSeriesDBs(db);
+        await createTagDBs(db);
+        await createStatsDBs(db);
+    });
+
+} else {
+    db = knex({
+        client: 'better-sqlite3',
+        connection: {
+            filename: path.resolve('./src/database/data.sql'),
+        },
+        useNullAsDefault: true,
+    });
+}
 
 //createDB(db);
 

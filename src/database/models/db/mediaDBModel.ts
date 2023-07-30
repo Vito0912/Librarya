@@ -3,6 +3,11 @@ import { MediaModel } from "../mediaModel";
 import { AuthorModel } from "../authorModel";
 import { ResponseData } from "../responseData";
 import { insertAuthorFull } from "./authorDBModel";
+import { insertIdentifierFull } from "./identifierDBModel";
+import { insertSeriesFull } from "./seriesDBModel";
+import { insertTagFull } from "./tagDBModel";
+import { insertRatingFull } from "./ratingDBModel";
+import { insertLanguageFull } from "./languageDBModel";
 
 export interface MediaDBModel {
     id?: number;
@@ -18,6 +23,7 @@ export interface MediaDBModel {
     creationDate?: number;
     modificationDate?: number;
     publishedDate?: number;
+    mediaType?: number;
 
     hasCover?: boolean;
     
@@ -72,6 +78,7 @@ export async function insertMediaToDB(db: Knex<any, unknown>, media: MediaModel)
         modificationDate: model.modificationDate,
         publishedDate: model.publishedDate,
         hasCover: model.hasCover,
+        mediaType: mediaType?.type,
     });
 
     if(mediaId.length <= 0) return { statusCode: 500, error: 'Error inserting media' };
@@ -82,7 +89,46 @@ export async function insertMediaToDB(db: Knex<any, unknown>, media: MediaModel)
             sort: author.sort,
         },
         mediaId[0]);
-        if(result.statusCode !== 200) console.log(result);
+        if(result.statusCode !== 200) return result;
+    }
+
+    for(const identifier of identifiers) {
+        let result = await insertIdentifierFull(db, {
+            name: identifier.name,
+            value: identifier.value,
+        }, mediaId[0]);
+        if(result.statusCode !== 200) return result;
+    }
+
+    for(const serie of series) {
+        let result = await insertSeriesFull(db, {
+            name: serie.name,
+            currentIndex: serie.currentIndex,
+        }, mediaId[0]);
+        if(result.statusCode !== 200) return result;
+    }
+
+    for(const tag of tags) {
+        let result = await insertTagFull(db, {
+            name: tag.name,
+        }, mediaId[0]);
+        if(result.statusCode !== 200) return result;
+    }
+
+    for(const rating of ratings) {
+        let result = await insertRatingFull(db, {
+            rating: rating.rating,
+            type: rating.type.type,
+        }, mediaId[0]);
+        if(result.statusCode !== 200) return result;
+    }
+
+    for(const language of languages) {
+        let result = await insertLanguageFull(db, {
+            lang_code: language.lang_code,
+            lang_name: language.lang_name,
+            type: language.type.type,
+        }, mediaId[0]);
         if(result.statusCode !== 200) return result;
     }
 
