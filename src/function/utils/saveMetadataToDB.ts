@@ -5,6 +5,10 @@ import { v4 as uuidv4 } from 'uuid';
 import fs from 'fs';
 import crypto from 'crypto';
 import FileHelper from "./helpers/file";
+import { MediaModel } from "@/database/models/mediaModel";
+import { insertMediaToDB } from "@/database/models/db/mediaDBModel";
+import { ResponseData } from "@/database/models/responseData";
+import { FileType } from "@/database/models/enums/filetype";
 
 class SaveMetadataToDB {
 
@@ -30,52 +34,36 @@ class SaveMetadataToDB {
         return true;
     }
 
-    private async saveMediaToDB() {
+    private async saveMediaToDB(): Promise<ResponseData> {
 
-        // Check if media already exists
-        let author = await db.select('id').from('author').where({'name': this.metadata.metadataInfo!.author}).first();
-        const media = await db.from('media').where({'title': this.metadata.metadataInfo!.title, 'author': author !== undefined ? (author.id ?? -1) : -1}).first();
-        if (media === undefined) {
+        const media_uuid = uuidv4();
 
-            if(author === undefined) {
-                author = await db('author').insert({'name': this.metadata.metadataInfo!.author, 'sort': this.metadata.metadataInfo!.author_sort ?? this.metadata.metadataInfo!.author});
-            }
+        if(this.metadata.metadataInfo === undefined) return {statusCode: 500, error: "Error fetching metadata from file. Is it suported?"}
 
-            const fileExtensionWithDot = path.extname(this.path);
-            const fileExtension = fileExtensionWithDot.substring(1, fileExtensionWithDot.length);
-            const md5Binary = this.generateMD5HashBinary();
-            const md5Filename = this.genereateMD5HashFilename()
-            const fileSizes = await FileHelper.getSize(this.path);
-            let mediaPath = (this.metadata.metadataInfo!.path ?? this.path) ?? ''
-            mediaPath = mediaPath.replace("./uploads/", "");
-
-            // Media already exists
-            const media = await db('media').insert({
-                title: (this.metadata.metadataInfo!.title) ?? 'Unkown', 
-                sort: this.metadata.metadataInfo!.sort ?? '', 
-                path: mediaPath, 
-                media_type: 0, //TODO: Add media type conversion 
-                created: this.metadata.metadataInfo!.creationDate, 
-                edited: this.metadata.metadataInfo!.modificationDate, 
-                published: this.metadata.metadataInfo!.published ?? '',
-                author: author !== undefined ? (author.id ?? -1) : -1, 
-                isbn: this.metadata.metadataInfo!.isbn ?? '', 
-                uuid: uuidv4(),
-                md5_binary_checksum: md5Binary,
-                md5_filename_checksum: md5Filename,
-                author_sort: this.metadata.metadataInfo!.author_sort ?? '', 
-                series_index: this.metadata.metadataInfo!.series_index ?? -1, 
-                has_cover: this.metadata.metadataInfo!.has_cover ?? false
-            }).returning('id');
-
-            await db('media_info').insert({
-                media_id: media[0].id,
-                format: fileExtension,
-                size: fileSizes.fileSize,
-                size_compressed: fileSizes.compressedSize,
-            });
+        const media: MediaModel = {
+            title: this.metadata.metadataInfo.title,
+            uuid: media_uuid,
+            md5_filname: this.genereateMD5HashFilename(),
+            md5_binary: this.generateMD5HashBinary(),
+            path: this.path,
+            users: [
+                {
+                    permission: 0,
+                    user: this.metadata.metadataInfo.user_id
+                }
+            ],
+            stats: {
+                file_type: FileType[this.metadata.metadataInfo.file_type],
+                file_size: (await FileHelper.getSize(this.path)).fileSize,
+                download_count: 0
+            },
+            authors: [
+                
+            ]
         }
-            
+
+        const status = insertMediaToDB(db, media);
+        return {statusCode: 200, data: status}
     }
 
     private generateMD5HashBinary(): string {
